@@ -6,6 +6,8 @@ public class InterfaceGraphique extends JFrame{
 	public JPanel principal;
 	public JPanel p1;
 	public JPanel p2;
+	public JPanel p3;
+	public JPanel p4;
 	
 	public JButton indice;
 	public JButton charger;
@@ -14,42 +16,40 @@ public class InterfaceGraphique extends JFrame{
 	
 	
 	public InterfaceGraphique(){
-		
+		super("geoguesseur");
+	
 		this.setVisible(true);
-		this.setSize(1500,400);
+		this.setSize(1000,400);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
-		principal =new JPanel( new BorderLayout());
-		add(principal);
 		
-		p1= new JPanel();
-		principal.add(p1,BorderLayout.EAST);
+		p2= new JPanel();
 		
-		JLabel l1= new JLabel("Où a été prise cette photo ? \n Déplacer le curseur sur la carte");
+		
+		// Panel droite
+		p1= new JPanel(new GridLayout(7,1));
+		JLabel l1= new JLabel("Où a été prise cette photo ? Déplacer le curseur ");
 		p1.add(l1);
-		
 		indice =new JButton("Obtenir un indice");
 		p1.add(indice);
-		
 		charger = new JButton("Je ne sais pas! Charger une nouvelle photo");
 		p1.add(charger);
-		
 		JLabel l2 = new JLabel("Total score");
 		p1.add(l2);
-		
 		score = new JTextField (5);
 		p1.add(score);
-		
-		JLabel l3 = new JLabel("temps écoulé");
+		JLabel l3 = new JLabel("Temps écoulé");
 		p1.add(l3);
-		
 		temps = new JTextField (5);
 		p1.add(temps);
 		
 		
-		p2= new JPanel();
-		principal.add(p2,BorderLayout.CENTER);
+		
+		add(p2,BorderLayout.CENTER);
+		add(p1,BorderLayout.EAST);
+		
+			
 		
 	}
 
