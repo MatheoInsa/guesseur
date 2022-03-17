@@ -1,8 +1,9 @@
 import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.*;
 
-public class InterfaceGraphique extends JFrame{
+public class InterfaceGraphique extends JFrame implements MouseListener {
 	public JPanel principal;
 	public JPanel p1;
 	public JPanel p2;
@@ -14,9 +15,13 @@ public class InterfaceGraphique extends JFrame{
 	public JTextField score;
 	public JTextField temps;
 	
+	public JLabel l1;
+	
 	
 	public InterfaceGraphique(){
 		super("geoguesseur");
+		addMouseListener(this);  
+
 	
 		this.setVisible(true);
 		this.setSize(1000,400);
@@ -24,12 +29,19 @@ public class InterfaceGraphique extends JFrame{
 		
 		
 		
-		p2= new JPanel();
+		p2= new JPanel(new GridLayout(2,1));
+		p3 = new JPanel();
+		p3.setBackground(Color.BLUE);
+		p2.add(p3);
+		p4= new JPanel();
+		p4.setBackground(Color.RED);
+		p2.add(p4);
+
 		
 		
 		// Panel droite
 		p1= new JPanel(new GridLayout(7,1));
-		JLabel l1= new JLabel("Où a été prise cette photo ? Déplacer le curseur ");
+		l1= new JLabel("Où a été prise cette photo ? Déplacer le curseur ");
 		p1.add(l1);
 		indice =new JButton("Obtenir un indice");
 		p1.add(indice);
@@ -46,8 +58,10 @@ public class InterfaceGraphique extends JFrame{
 		
 		
 		
+		
 		add(p2,BorderLayout.CENTER);
 		add(p1,BorderLayout.EAST);
+		
 		
 			
 		
@@ -56,6 +70,29 @@ public class InterfaceGraphique extends JFrame{
 	public static void main (String[] args){
 		InterfaceGraphique i1 = new InterfaceGraphique();
 	}
+	
+	public void mouseClicked(MouseEvent e) {  
+        l1.setText("Mouse Clicked");  
+        Graphics g=getGraphics();  
+        g.setColor(Color.BLUE);  
+        g.fillOval(e.getX(),e.getY(),30,30);  
+        System.out.println("x"+e.getX() + "y"+e.getY());
+    }  
+    public void mouseEntered(MouseEvent e) {  
+        l1.setText("Mouse Entered");  
+    }  
+    public void mouseExited(MouseEvent e) {  
+        l1.setText("Mouse Exited");  
+    }  
+    public void mousePressed(MouseEvent e) {  
+        l1.setText("Mouse Pressed");  
+    }  
+    public void mouseReleased(MouseEvent e) {  
+        l1.setText("Mouse Released");  
+    }  
+	
+	
+	
 }
 		
 		
