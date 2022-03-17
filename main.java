@@ -14,5 +14,7 @@ public class main {
 		System.out.println(b.toString());
 		
 		b.remplirGPS();
+		System.out.println(b.toString());
+		
 	}
 }

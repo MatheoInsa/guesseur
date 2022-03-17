@@ -30,24 +30,22 @@ public class Bibliotheque {
 		for(Photo p : photos){
 			System.out.print(p.file.getName()+" : ");
 			Scanner k1 = new Scanner(System.in);
-			System.out.println("quelle longitude?");
-			double lg = (double)k1.nextDouble();
-			p.lg = lg;
+			System.out.println("quel x?");
+			int a = k1.nextInt();
+			p.x = a;
 			
 			Scanner k2 = new Scanner(System.in);
-			System.out.println("quelle latitude?");
-			double lt = (double)k2.nextDouble();
-			p.lt = lt;
+			System.out.println("quel y?");
+			int b = k2.nextInt();
+			p.y = b;
 		}
 		System.out.println("Fini ! Toutes les coordonnées ont été rentrées");
 	}
 	
 	public String toString(){
 		String s = "";
-		File dossier = new File(path);
-		File[] list = dossier.listFiles();
-		for(File item : list){
-			s=s+"\n"+item.getName();
+		for(Photo p : photos){
+			s=s+"\n"+p.file.getName()+", de coordonnées "+p.x+" - "+p.y;
 		}
 		return s;
 	}
