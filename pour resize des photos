@@ -1,0 +1,13 @@
+// a importer
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
+//j'ai utilisé ça, le principe c'est utiliser la méthode .getScaledInstance qui prend largeur et longueur en argument
+//par contre elle s'applique qu'a des images et j'avais du ImageIcon donc j'ai du faire ImageIcon.getImage().getScaledInstance()
+
+					ImageIcon imageIcon = new ImageIcon(bufferedImage);
+					ImageIcon scaledImage = new ImageIcon(imageIcon.getImage().getScaledInstance(700, 350, Image.SCALE_DEFAULT));
+					JLabel img = new JLabel(imageIcon);
+					img.setIcon(scaledImage);
+          
+ // ici par exemple ça fait largeur 700 hauteur 350
