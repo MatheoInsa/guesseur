@@ -1,0 +1,171 @@
+import java.awt.event.*;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Graphics2D;
+
+
+
+
+
+public class InterfaceGraphique extends JFrame implements MouseListener {
+	public JPanel principal;
+	public JPanel p1;
+	public JPanel p2;
+	public JPanel p3;
+	public JPanel p4;
+	
+	public JButton indice;
+	public JButton charger;
+	public JButton valider;
+	public JTextField score;
+	public JTextField temps;
+	public JTextField msg;
+	
+	public JLabel l1;
+	
+	
+	public InterfaceGraphique(){
+		super("geoguesseur");
+		addMouseListener(this);  
+
+	
+		this.setVisible(true);
+		this.setSize(2000,1000);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//panel principal
+		principal = new JPanel(new GridLayout(2,2));
+		
+		//panel haut gauche
+		p3 = new JPanel();
+		p3.setBackground(Color.BLUE);
+		
+		//panel bas gauche
+		p4= new JPanel();
+		p4.setBackground(Color.RED);
+		
+
+		
+		
+		// Panel haut droite
+		p1= new JPanel(new GridLayout(7,1));
+		l1= new JLabel("Où a été prise cette photo ? Déplacer le curseur ");
+		p1.add(l1);
+		indice =new JButton("Obtenir un indice");
+		p1.add(indice);
+		charger = new JButton("Je ne sais pas! Charger une nouvelle photo");
+		p1.add(charger);
+		JLabel l2 = new JLabel("Total score");
+		p1.add(l2);
+		score = new JTextField (5);
+		p1.add(score);
+		JLabel l3 = new JLabel("Temps écoulé");
+		p1.add(l3);
+		temps = new JTextField (5);
+		p1.add(temps);
+		
+		//panel bas droite
+		p2=new JPanel();
+		msg = new JTextField (50);
+		p2.add(msg);
+		valider =new JButton("VALIDER");
+		p2.add(valider);
+		
+		principal.add(p3);
+		principal.add(p1);
+		principal.add(p4);
+		principal.add(p2);
+		add(principal, BorderLayout.CENTER);
+		
+			
+		
+	}
+
+	
+	
+	public void mouseClicked(MouseEvent e) {  
+        l1.setText("Mouse Clicked");  
+        Graphics g=getGraphics();  
+        g.setColor(Color.BLUE);  
+        
+        if(e.getX()>160 && e.getX()<1000 && e.getY()>500 && e.getY()<960){
+			g.fillOval(e.getX()-15,e.getY()-15,30,30); 
+			msg.setText("Interessting ... U sure ?");
+		} else{
+			msg.setText("Can't click here dummy!");
+		}
+			
+        System.out.println("x"+e.getX() + "y"+e.getY());
+    }  
+    public void mouseEntered(MouseEvent e) {  
+        l1.setText("Mouse Entered");  
+    }  
+    public void mouseExited(MouseEvent e) {  
+        l1.setText("Mouse Exited");  
+    }  
+    public void mousePressed(MouseEvent e) {  
+        l1.setText("Mouse Pressed");  
+    }  
+    public void mouseReleased(MouseEvent e) {  
+        l1.setText("Mouse Released");  
+    }  
+	
+	
+
+
+
+	public static void main (String[] args) throws IOException {
+
+		InterfaceGraphique i1 = new InterfaceGraphique();
+		
+
+
+
+
+		
+
+		//image carte
+        File file = new File("C:\\Users\\33668\\Documents\\INSA-PC\\Algo\\Projet\\map2.0.png");
+        BufferedImage bufferedImage = ImageIO.read(file);
+		
+        ImageIcon imageIcon = new ImageIcon(bufferedImage);
+        ImageIcon scaledImage = new ImageIcon(imageIcon.getImage().getScaledInstance(800, 450, Image.SCALE_DEFAULT));
+       
+		
+        i1.setLayout(new FlowLayout());
+        
+       
+        JLabel jLabel = new JLabel();
+
+        jLabel.setIcon(scaledImage);
+        //jLabel.setSize(500,500);
+        i1.p4.add(jLabel);
+        i1.setVisible(true);
+        
+        
+        //image à deviner
+        File file2 = new File("C:\\Users\\33668\\Documents\\INSA-PC\\Algo\\Projet\\BU.jpg");
+        BufferedImage bufferedImage2 = ImageIO.read(file2);
+		
+        ImageIcon imageIcon2 = new ImageIcon(bufferedImage2);
+		 ImageIcon scaledImage2 = new ImageIcon(imageIcon2.getImage().getScaledInstance(800, 450, Image.SCALE_DEFAULT));
+		
+        i1.setLayout(new FlowLayout());
+        
+       
+        JLabel jLabel2 = new JLabel();
+
+        jLabel2.setIcon(scaledImage2);
+        //jLabel2.setSize(200,200);
+        i1.p3.add(jLabel2);
+        i1.setVisible(true);
+
+        i1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}
+		
+	
