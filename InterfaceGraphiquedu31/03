@@ -1,0 +1,246 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import javax.swing.*;
+import java.util.Random;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import javax.swing.SwingUtilities;
+
+
+public class InterfaceGraphique extends JFrame implements MouseListener {
+	
+	public JPanel principal;
+	
+	public JPanel p1;
+	public JPanel p2;
+	public JPanel p3;
+	public JPanel p4;
+	
+	public JButton indice;
+	public JButton charger;
+	public JButton valider;
+	
+	public JTextField score;
+	public JTextField temps;
+	
+	public JLabel l1 = new JLabel("");
+	public JLabel carte;
+
+	
+	public Bibliotheque b;
+	public Photo photoactuelle;
+	public int points = 0;
+	
+	private int x;
+	private int y;
+	public int xF;
+	public int yF;
+
+
+	
+	
+	public InterfaceGraphique(){
+		
+		super("geoguesseur");
+
+		p1 = new JPanel(new GridLayout(8,1));
+		p3 = new JPanel();
+		p2 = new JPanel(new GridLayout(2,1));
+		p4 = new JPanel();
+		
+		b=new Bibliotheque("LESPHOTOS");
+		File f = new File("carte2.jpg");
+
+		p2.add(p3);	
+		p2.add(p4);
+
+		
+		add(p2,BorderLayout.CENTER);
+		add(p1,BorderLayout.EAST);
+
+
+		try{
+			BufferedImage bufferedImage2 = ImageIO.read(f);
+			ImageIcon imageIcon2 = new ImageIcon(bufferedImage2);
+			ImageIcon scaledImage2 = new ImageIcon(imageIcon2.getImage().getScaledInstance(720, 360, Image.SCALE_DEFAULT));
+			carte = new JLabel(imageIcon2);
+			carte.setIcon(scaledImage2);
+			} catch(IOException e){
+				System.out.println("Error: "+e);
+			}
+
+		p4.add(carte);
+
+		
+		int m = (int)((Math.random()*(b.photos.size()-1))+1);
+		int i=1;
+
+		for(Photo p : b.photos){		
+			if (i==m){
+				try{
+					BufferedImage bufferedImage = ImageIO.read(p.file);
+					ImageIcon imageIcon = new ImageIcon(bufferedImage);
+					ImageIcon scaledImage = new ImageIcon(imageIcon.getImage().getScaledInstance(720, 360, Image.SCALE_DEFAULT));
+					JLabel img = new JLabel(imageIcon);
+					img.setIcon(scaledImage);
+					p3.add(img);
+					photoactuelle = p;
+					p.utilise=true;
+					
+					} catch(IOException e){
+						System.out.println("Error: "+e);
+						}
+						}
+						i++;
+						}
+		
+		
+		// Panel droite
+		l1.setText("Où a été prise cette photo ? Clique sur la carte ");
+		p1.add(l1);
+		
+		indice =new JButton("Obtenir un indice");
+		p1.add(indice);
+		indice.addActionListener(new EcouteurIndice(this));
+		
+		charger = new JButton("Je ne sais pas! Charger une nouvelle photo");
+		p1.add(charger);
+		charger.addActionListener(new EcouteurCharger(this));
+		
+		JLabel l2 = new JLabel("Total score");
+		p1.add(l2);
+		
+		score = new JTextField (5);
+		score.setEditable(false);
+		p1.add(score);
+		
+		JLabel l3 = new JLabel("Temps écoulé");
+		p1.add(l3);
+		
+		temps = new JTextField (5);
+		temps.setEditable(false);
+		p1.add(temps);
+		
+		valider = new JButton("Valider la position");
+		p1.add(valider);
+		valider.addActionListener(new EcouteurValider(this));
+		
+		p4.addMouseListener(this);  
+		this.setVisible(true);
+		this.setSize(900,700);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
+		this.setDefaultLookAndFeelDecorated(true);
+		this.setExtendedState(this.MAXIMIZED_BOTH);
+		this.setResizable(false);
+
+		
+		
+	}
+
+	public static void main (String[] args){
+		InterfaceGraphique i1 = new InterfaceGraphique();
+
+		
+		
+	}
+	
+	public void paint(Graphics g){
+        super.paint(g);
+        g=p4.getGraphics();
+        g.setColor(Color.BLUE);
+        g.fillOval(x-5, y-5, 10, 10);
+    }
+
+@Override
+    public void mouseClicked(MouseEvent e) { 
+		this.x = e.getX();
+        this.y = e.getY();        
+        
+        System.out.println(x+" - "+y);
+        repaint();  
+}
+    
+    public void mouseEntered(MouseEvent e) {  
+        l1.setText("Mouse Entered");  
+    }  
+    public void mouseExited(MouseEvent e) {  
+        l1.setText("Mouse Exited");  
+    }  
+    public void mousePressed(MouseEvent e) {  
+        l1.setText("Mouse Pressed");  
+    }  
+    public void mouseReleased(MouseEvent e) {  
+        l1.setText("Mouse Released");  
+    }  
+    
+	public void ecouteValider(){
+		xF=x;
+		yF=y;
+		System.out.println(xF+" "+yF);
+		System.out.println(this.XenLGT()+" - "+this.YenLAT());
+		System.out.println(this.LGTenX(this.XenLGT())+" - "+this.LATenY(this.YenLAT()));
+		photoactuelle.compareGPS(this.XenLGT(), this.YenLAT());
+	}
+	
+    
+    public void indice(){
+		JPanel zoneindice = new JPanel();
+		zoneindice.setBackground(new Color(0,100, 0, 50));
+		zoneindice.setBounds(1000, 100, 400, 400);
+		p3.add(zoneindice);
+}
+
+	public void charger(){
+		int m = (int)((Math.random()*(b.photos.size()-1))+1);
+		int i=1;
+		
+		for(Photo p : b.photos){		
+			if (i==m && p.utilise==false){ //gerer le fait que ça ne peut pas etre la meme
+				try{
+					System.out.println(i);
+					BufferedImage bufferedImage = ImageIO.read(p.file);
+					ImageIcon imageIcon = new ImageIcon(bufferedImage);
+					ImageIcon scaledImage = new ImageIcon(imageIcon.getImage().getScaledInstance(720, 360, Image.SCALE_DEFAULT));
+					JLabel img = new JLabel(imageIcon);
+					img.setIcon(scaledImage);
+					p3.removeAll();
+					p3.add(img);
+					photoactuelle = p;
+					p.utilise=true;
+					points = points - 10;
+					score.setText(""+points);
+					} catch(IOException e){
+						System.out.println("Error: "+e);
+						}
+						}
+						i++;
+						}
+						validate();
+						repaint();
+		
+	}
+	
+	public double XenLGT(){
+		double LGT = ((double)xF-210) / (857 - 210) * ( 4.886424 - 4.869255 ) + 4.869255;
+				return LGT;
+			}
+					
+	public double YenLAT(){
+				double LAT = ( (double)yF - 79 )/(79 - 302 ) * ( 45.786499 - 45.781483 ) + 45.786499;																						   
+				return LAT;
+		}
+		
+	public double LGTenX(double lgt){
+		double pixelx = ( lgt - 4.869255) / (4.886424 - 4.869255) * (857 - 210) + 210;
+		return (int)pixelx;
+	}
+	
+	public double LATenY(double lat){ 
+		double pixely = ( lat - 45.786499) / (45.781483 - 45.786499) * (302 - 79) + 79;
+		return (int) pixely;
+	}
+	}
+
